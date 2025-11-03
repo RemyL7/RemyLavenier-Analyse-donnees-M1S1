@@ -17,7 +17,7 @@ print(contenu)
 # Question 6 : calculer le nombre de lignes et de colonnes et les afficher
 nb_lignes = len(contenu)
 nb_colonnes = len(contenu.columns)
-print(f"\nNombre de lignes : {nb_lignes}")
+print(f"Nombre de lignes : {nb_lignes}")
 print(f"Nombre de colonnes : {nb_colonnes}")
 
 # Question 7 : faire une liste des types de variables des colonnes et l'afficher
