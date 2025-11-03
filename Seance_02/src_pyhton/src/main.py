@@ -45,64 +45,61 @@ for colonne in contenu.columns:
 print("Sommes (effectifs) des colonnes :")
 for nom_colonne, valeur in effectifs:
     print(f"{nom_colonne} : {valeur}")
+ 
+# Question 11 : créer des diagrammes pour chaque département
+os.makedirs("graph_departements", exist_ok=True)
 
-# 
-# # Question 11 : créer des diagrammes pour chaque département
-# os.makedirs("graph_departements", exist_ok=True)
+for dept in contenu["Libellé du département"].unique():
+    data_dept = contenu[contenu["Libellé du département"] == dept]
 
-# for dept in contenu["Libellé du département"].unique():
-#     data_dept = contenu[contenu["Libellé du département"] == dept]
+    inscrits = data_dept["Inscrits"].sum()
+    votants = data_dept["Votants"].sum()
 
-#     inscrits = data_dept["Inscrits"].sum()
-#     votants = data_dept["Votants"].sum()
+    plt.figure()
+    plt.bar(["Inscrits", "Votants"], [inscrits, votants], color=["skyblue", "lightgreen"])
+    plt.title(f"Libellé du département : {dept}")
+    plt.ylabel("Nombre de personnes")
+    plt.xlabel("Catégorie")
 
-#     plt.figure()
-#     plt.bar(["Inscrits", "Votants"], [inscrits, votants], color=["skyblue", "lightgreen"])
-#     plt.title(f"Libellé du département : {dept}")
-#     plt.ylabel("Nombre de personnes")
-#     plt.xlabel("Catégorie")
+    fichier = f"graph_departements/diagramme_{dept}.png"
+    plt.savefig(fichier)
+    plt.close()
 
-#     fichier = f"graph_departements/diagramme_{dept}.png"
-#     plt.savefig(fichier)
-#     plt.close()
+    print(f"Diagramme créé pour le département {dept} → {fichier}")
 
-#     print(f"Diagramme créé pour le département {dept} → {fichier}")
-
-# print("\nTous les graphiques ont été générés dans le dossier 'graph_departements'.")
+print("\nTous les graphiques ont été générés dans le dossier 'graph_departements'.")
 
 # # Question 12 : créer des diagrammes circulaires pour chaque département
-# os.makedirs("graph_rond_departements", exist_ok=True)
+os.makedirs("graph_rond_departements", exist_ok=True)
 
-# col_dept = "Libellé du département"
-# col_blancs = "Blancs"
-# col_nuls = "Nuls"
-# col_exprimes = "Exprimés"
-# col_abstention = "Abstentions"
+col_dept = "Libellé du département"
+col_blancs = "Blancs"
+col_nuls = "Nuls"
+col_exprimes = "Exprimés"
+col_abstention = "Abstentions"
 
-# for dept in contenu[col_dept].unique():
-#     data_dept = contenu[contenu[col_dept] == dept]
+for dept in contenu[col_dept].unique():
+    data_dept = contenu[contenu[col_dept] == dept]
 
-#     blancs = data_dept[col_blancs].sum()
-#     nuls = data_dept[col_nuls].sum()
-#     exprimes = data_dept[col_exprimes].sum()
-#     abstentions = data_dept[col_abstention].sum()
+    blancs = data_dept[col_blancs].sum()
+    nuls = data_dept[col_nuls].sum()
+    exprimes = data_dept[col_exprimes].sum()
+    abstentions = data_dept[col_abstention].sum()
 
-#     valeurs = [blancs, nuls, exprimes, abstentions]
-#     labels = ["Blancs", "Nuls", "Exprimés", "Abstentions"]
+    valeurs = [blancs, nuls, exprimes, abstentions]
+    labels = ["Blancs", "Nuls", "Exprimés", "Abstentions"]
 
-#     plt.figure()
-#     plt.pie(valeurs, labels=labels, autopct='%1.1f%%', startangle=90)
-#     plt.title(f"Répartition des votes - Département {dept}")
+    plt.figure()
+    plt.pie(valeurs, labels=labels, autopct='%1.1f%%', startangle=90)
+    plt.title(f"Répartition des votes - Département {dept}")
 
-#     nom_fichier = f"graph_rond_departements/pie_{dept}.png"
-#     plt.savefig(nom_fichier)
-#     plt.close()
+    nom_fichier = f"graph_rond_departements/pie_{dept}.png"
+    plt.savefig(nom_fichier)
+    plt.close()
 
-#     print(f"Diagramme circulaire créé pour {dept} → {nom_fichier}")
+    print(f"Diagramme circulaire créé pour {dept} → {nom_fichier}")
 
-# print("\nTous les diagrammes circulaires sont dans le dossier 'graph_rond_departements'.")
-
-# Mettre dans un commentaire le numéro de la question
+print("\nTous les diagrammes circulaires sont dans le dossier 'graph_rond_departements'.")
 
 # Question 13 : histogramme
 col_inscrits = "Inscrits"
@@ -125,6 +122,3 @@ plt.show()
 
 print("✅ Histogramme créé et enregistré sous 'histogramme_inscrits.png'")
 
-
-
-#bien retirer les ... sur la question 11, 12 (bcp de données avec les graphiques) avec ctrl+K+U 
