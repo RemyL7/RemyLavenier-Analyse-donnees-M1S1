@@ -5,6 +5,7 @@ import pandas as pd
 import scipy
 import scipy.stats
 import matplotlib.pyplot as plt
+from scipy.stats import norm, lognorm, uniform, chi2, pareto, poisson, randint, binom, zipf
 import os
 
 #https://docs.scipy.org/doc/scipy/reference/stats.html
@@ -14,7 +15,7 @@ dist_names = ['norm', 'beta', 'gamma', 'pareto', 't', 'lognorm', 'invgamma', 'in
 """
 print(dist_names)
 """
-# proposer les distribution discrètes : dirac, uniforme, binomiale, poisson, zipf
+# proposer les distributions discrètes : dirac, uniforme, binomiale, poisson, zipf
 distri_discretes = ['dirac', 'uniforme', 'binomiale', 'poisson', 'zipf']
 print ("distributions discretes porposées :", distri_discretes)
 
@@ -56,8 +57,70 @@ def choix_distri_discretes(dist_name_discr):
     os.makedirs(dossier, exist_ok=True)
     fichier = os.path.join(dossier, f"{title}.png")
     plt.savefig(fichier, bbox_inches='tight', dpi=300)
-    print("Graphique enregistré dans : {fichier}")
+    print(f"Graphique enregistré dans : {fichier}")
     plt.show()
 # choix de la distribution discrète théorique à afficher
 choix_distri_discretes("dirac")  # Exemple de choix de distribution
 
+
+# proposer les distributions continues : poisson, normale, log-normale, uniforme, chi2, Pareto
+distri_continues = ['poisson', 'normale', 'log-normale', 'uniforme', 'chi2', 'Pareto']
+print ("distributions discretes porposées :", distri_continues)
+
+# définir les distributions discrètes dans une fonction de choix
+def choix_distri_continues(dist_name_cont):
+    dist_name_cont = dist_name_cont.lower() #pour les erreurs de majuscules
+    if dist_name_cont == "normale":
+        x = np.linspace(-5, 5, 500)
+        y = norm.pdf(x, 0, 1)
+        title = "Loi Normale (μ=0, σ=1)"
+
+    elif dist_name_cont == "log-normale":
+        x = np.linspace(0, 5, 500)
+        y = lognorm.pdf(x, s=0.9)
+        title = "Loi Log-Normale (s=0.9)"
+
+    elif dist_name_cont == "uniforme":
+        x = np.linspace(0, 1, 500)
+        y = uniform.pdf(x, 0, 1)
+        title = "Loi Uniforme Continue [0,1]"
+
+    elif dist_name_cont == "chi2":
+        x = np.linspace(0, 10, 500)
+        y = chi2.pdf(x, df=3)
+        title = "Loi du Chi² (df=3)"
+
+    elif dist_name_cont == "pareto":
+        x = np.linspace(1, 5, 500)
+        y = pareto.pdf(x, 3)
+        title = "Loi de Pareto (a=3)"
+
+    elif dist_name_cont == "poisson":
+        # Poisson reste discrète, mais on peut la tracer comme quasi-continue
+        x = np.arange(0, 15)
+        y = poisson.pmf(x, 3)
+        title = "Loi de Poisson (λ=3)"
+
+    else:
+        raise ValueError("Distribution inconnue")
+
+    # --- Tracé du graphique ---
+    plt.figure(figsize=(8, 5))
+    if dist_name_cont == "poisson":
+        plt.bar(x, y, color='royalblue')
+    else:
+        plt.plot(x, y, color='royalblue', linewidth=2)
+    plt.title(title)
+    plt.xlabel("x")
+    plt.ylabel("f(x)")
+    plt.grid(True, linestyle="--", alpha=0.5)
+
+# Enregistrement dans le dossier figures_continues
+    dossier = "figures_continues"
+    os.makedirs(dossier, exist_ok=True)
+    fichier = os.path.join(dossier, f"{title}.png")
+    plt.savefig(fichier, bbox_inches='tight', dpi=300)
+    print(f"Graphique enregistré dans : {fichier}")
+    plt.show()
+# choix de la distribution discrète théorique à afficher
+choix_distri_continues("normale")  # Exemple de choix de distribution
