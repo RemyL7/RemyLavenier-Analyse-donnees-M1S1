@@ -10,7 +10,7 @@ import os
 csv_path = "data/resultats-elections-presidentielles-2022-1er-tour.csv"
 with open(csv_path, "r", encoding="utf-8") as fichier:
     contenu = pd.read_csv(fichier)
-
+"""
 # Question 5 : afficher sur le terminal le contenu du DataFrame
 print(contenu)
 
@@ -103,22 +103,64 @@ print("\nTous les diagrammes circulaires sont dans le dossier 'graph_rond_depart
 
 # Question 13 : histogramme
 col_inscrits = "Inscrits"
-
-# 3️⃣ Vérifie qu'il n'y a pas de valeurs manquantes
 df = contenu.dropna(subset=[col_inscrits])
-
-# 4️⃣ Création de l’histogramme
 plt.figure(figsize=(8, 6))
 plt.hist(contenu[col_inscrits], bins=20, edgecolor='black', color='skyblue')
-
-# 5️⃣ Mise en forme
 plt.title("Histogramme de la distribution des inscrits")
 plt.xlabel("Nombre d’inscrits")
 plt.ylabel("Fréquence (nombre de départements)")
-
-# 6️⃣ Sauvegarde dans un fichier image
 plt.savefig("histogramme_inscrits.png")
 plt.show()
 
 print("✅ Histogramme créé et enregistré sous 'histogramme_inscrits.png'")
+"""
+print(contenu.columns)
+
+# Question Bonus : diagrammes circulaires
+os.makedirs("graph_rond_departements_voix", exist_ok=True)
+
+col_dept = "Libellé du département"
+col_ARTHAUD = "Nom"
+col_ROUSSEL = "Nom1"
+col_MACRON = "Nom2"
+col_LASSALLE = "Nom3"
+col_LE_PEN = "Nom4"
+col_ZEMMOUR = "Nom5"
+col_MELENCHON = "Nom6"
+col_HIDALGO = "Nom7"
+col_JADOT = "Nom8"
+col_PECRESSSE = "Nom9"
+col_POUTOU = "Nom10"
+col_DUPONT_AIGNAN = "Nom11"
+
+for dept in contenu[col_dept].unique():
+    data_dept = contenu[contenu[col_dept] == dept]
+
+    Arthaud = data_dept[col_ARTHAUD].sum()
+    Roussel = data_dept[col_ROUSSEL].sum()
+    Macron = data_dept[col_MACRON].sum()
+    Lassalle = data_dept[col_LASSALLE].sum()
+    Le_Pen = data_dept[col_LE_PEN].sum()
+    Zemmour = data_dept[col_ZEMMOU].sum()
+    Melenchon = data_dept[col_MELENCHON].sum()
+    Hidlago = data_dept[col_HIDALGO].sum()
+    Jadot = data_dept[col_JADOT].sum()
+    Pecresse = data_dept[col_PECRESSE].sum()
+    Poutou = data_dept[col_POUTOU].sum()
+    Dupont_aignan = data_dept[col_DUPONT-AIGNAN].sum()
+
+    valeurs = [Arthaud, Roussel, Macron, Lassalle, Le_Pen, Zemmour, Melenchon, Hidlago, Jadot, Pecresse, Poutou, Dupont_aignan]
+    labels = ["Nom", "Nom1", "Nom2", "Nom3", "Nom4", "Nom5", "Nom6", "Nom7", "Nom8", "Nom9", "Nom10", "Nom11"]
+
+    plt.figure()
+    plt.pie(valeurs, labels=labels, autopct='%1.1f%%', startangle=90)
+    plt.title(f"Répartition des votes - Département {dept}")
+
+    nom_fichier = f"graph_rond_departements_voix/pie_{dept}.png"
+    plt.savefig(nom_fichier)
+    plt.close()
+
+    print(f"Diagramme circulaire créé pour {dept} → {nom_fichier}")
+
+print("\nTous les diagrammes circulaires sont dans le dossier 'graph_rond_departements'.")
 
