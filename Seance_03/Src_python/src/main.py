@@ -16,7 +16,7 @@ print(contenu)
 # Question 5 : calculs sur caractères quantiatifs
 colonnes_quantitatives = contenu.select_dtypes(include=['int64', 'float64'])
 moyennes = colonnes_quantitatives.mean()
-medians = colonnes_quantitatives.median()
+medianes = colonnes_quantitatives.median()
 modes = colonnes_quantitatives.mode().iloc[0]
 ecart_types = colonnes_quantitatives.std()
 ecarts_absolus = (colonnes_quantitatives - moyennes).abs().mean()
@@ -24,7 +24,7 @@ etendues = colonnes_quantitatives.max() - colonnes_quantitatives.min()
 # Question 6 : affichage des résultats
 stats = pd.DataFrame({
     "Moyenne": moyennes,
-    "Médiane": medians,
+    "Médiane": medianes,
     "Mode": modes,
     "Écart-type": ecart_types,
     "Écart absolu moyen": ecarts_absolus,
@@ -61,7 +61,7 @@ for col in colonnes_quantitatives.columns:
 
 print("Boîtes à moustaches enregistrées dans le dossier 'img/'")
 
-# Question 10 : 
+# Question 10 : catégoriser et dénombrer le nombre d’îles selon leur surface
 csv_path = "data/island-index.csv"
 with open(csv_path, "r", encoding="utf-8") as fichier2:
     df = pd.read_csv(fichier2)
@@ -111,3 +111,17 @@ Afficher le résultat sur le terminal
    ▼
 FIN
 """
+
+# Question Bonus : CSV ; élections et îles
+stats_complet = pd.concat([stats, distances], axis=1)
+stats_complet.to_csv("statistiques_elections.csv", index=True, encoding='utf-8')
+compte_categories.index.name = "Intervalles (km²)"
+compte_categories.to_csv("categories_iles.csv", index=True, encoding='utf-8', header=["Nombre_d_iles"])
+
+# Question Bonus : excel ; éléctions + îles
+with pd.ExcelWriter("resultats_stats_seance3.xlsx", engine="openpyxl") as writer:
+    stats_complet.to_excel(writer, sheet_name="Stats_Complet", index=True)
+    compte_categories.to_excel(writer, sheet_name="Categories_Iles", index=True, header=["Nombre_d_iles"])
+
+
+print("\nFichiers CSV et execl créés")
