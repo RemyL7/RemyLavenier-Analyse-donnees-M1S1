@@ -21,11 +21,14 @@ print(f"Nombre de lignes : {nb_lignes}")
 print(f"Nombre de colonnes : {nb_colonnes}")
 
 # Question 7 : faire une liste des types de variables des colonnes et l'afficher
+
 print("Types de données Python par colonne :")
 for colonne in contenu.columns:
     premier_non_null = contenu[colonne].dropna().iloc[0] if contenu[colonne].dropna().size > 0 else None
     type_python = type(premier_non_null).__name__ if premier_non_null is not None else "NoneType"
     print(f"{colonne} : {type_python}")
+
+
 
 # Question 8 : afficher les noms des colonnes
 print ("\nNoms des colonnes :")
@@ -66,8 +69,6 @@ for dept in contenu["Libellé du département"].unique():
     plt.savefig(fichier)
     plt.close()
 
-    print(f"Diagramme créé pour le département {dept} → {fichier}")
-
 print("\nTous les graphiques ont été générés dans le dossier 'graph_departements'.")
 
 # # Question 12 : créer des diagrammes circulaires pour chaque département
@@ -99,8 +100,6 @@ for dept in contenu[col_dept].unique():
     plt.savefig(nom_fichier)
     plt.close()
 
-    print(f"Diagramme circulaire créé pour {dept} → {nom_fichier}")
-
 print("\nTous les diagrammes circulaires sont dans le dossier 'graph_rond_departements'.")
 
 # Question 13 : histogramme
@@ -115,8 +114,6 @@ plt.savefig("histogramme_inscrits.png")
 plt.show()
 
 print("\nHistogramme créé et enregistré sous 'histogramme_inscrits.png'")
-
-print(contenu.columns)
 
 # Question Bonus : diagrammes circulaires
 os.makedirs("graph_rond_departements_voix", exist_ok=True)
@@ -162,8 +159,6 @@ for dept in contenu[col_dept].unique():
     nom_fichier = f"graph_rond_departements_voix/pie_{dept}.png"
     plt.savefig(nom_fichier)
     plt.close()
-
-    print(f"Diagramme circulaire créé pour {dept} → {nom_fichier}")
 
 print("\nTous les diagrammes circulaires sont dans le dossier 'graph_rond_departements'.")
 
