@@ -71,7 +71,7 @@ for dept in contenu["Libellé du département"].unique():
 
 print("\nTous les graphiques ont été générés dans le dossier 'graph_departements'.")
 
-# # Question 12 : créer des diagrammes circulaires pour chaque département
+# Question 12 : créer des diagrammes circulaires pour chaque département
 os.makedirs("graph_rond_departements", exist_ok=True)
 
 col_dept = "Libellé du département"
