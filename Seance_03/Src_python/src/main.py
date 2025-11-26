@@ -50,16 +50,16 @@ print (distances.round(2))
 # Question 8 : boites à moustaches pour chaque colonne quantitative
 import os
 colonnes_quantitatives = contenu.select_dtypes(include=['int64', 'float64'])
-os.makedirs("img", exist_ok=True)
+os.makedirs("boxplots", exist_ok=True)
 for col in colonnes_quantitatives.columns:
     plt.figure(figsize=(5, 6))
     plt.boxplot(contenu[col].dropna(), vert=True, patch_artist=True, boxprops=dict(facecolor="#88ccee"))
-    plt.title(f"img - {col}")
+    plt.title(f"boxplots - {col}")
     plt.ylabel(col)
-    plt.savefig(f"img/{col}.png")
+    plt.savefig(f"boxplots/{col}.png")
     plt.close()
 
-print("Boîtes à moustaches enregistrées dans le dossier 'img/'")
+print("Boîtes à moustaches enregistrées dans le dossier 'boxplots/'")
 
 # Question 10 : catégoriser et dénombrer le nombre d’îles selon leur surface
 csv_path = "data/island-index.csv"
@@ -100,7 +100,7 @@ Poser les bornes et les intervalles de chaque catégorie de surface en liste :
    └─ surface > 10000        → "10000+"
    │
    ▼
-Créer la variable "categories" en utilisant pd.cut() avec les bornes et intervalles définis précedemment
+Créer la variable "categories" en utilisant pd.cut() avec les bornes et intervalles définis précédemment
    │
    ▼
 Somme du nombre d’îles par catégorie en utilisant value_counts()
