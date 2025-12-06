@@ -111,17 +111,16 @@ stat1, p_value1 = shapiro(data1)
 stat2, p_value2 = shapiro(data2)
 
 print("Test Shapiro - Fichier 1")
-print("Statistique =", round(stat1, 4), ", p-value =", round(p_value1, 4))
-if p_value1 > 0.05:
+print("Statistique =", round(stat1, 4), ", p-value =", round(p_value1, 6))
+if p_value1 > 0.001:
     print("Distribution normale")
 else:
     print("Distribution non normale")
 
 print("\nTest Shapiro - Fichier 2")
-print("Statistique =", round(stat2, 4), ", p-value =", round(p_value2, 4))
-if p_value2 > 0.05:
+print("Statistique =", round(stat2, 4), ", p-value =", round(p_value2, 6))
+if p_value2 > 0.001:
     print("Distribution normale")
 else:
     print("Distribution non normale")
-
 
