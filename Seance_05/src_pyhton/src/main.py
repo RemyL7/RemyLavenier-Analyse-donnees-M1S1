@@ -47,10 +47,10 @@ def intervalle_fluctuation(f, n, z=1.96):
     return round(borne_inf, 3), round(borne_sup, 3)
 frequences_interv = [frequences]
 n = 1000
-intervales = {}
+intervales_echantillon = {}
 for modalite, f in frequences.items():
-    intervales[modalite] = intervalle_fluctuation(f, n)
-print(intervales)
+    intervales_echantillon[modalite] = intervalle_fluctuation(f, n)
+print(intervales_echantillon, "\n")
 
 def intervalle_fluctuation_pop(f, n, z=1.96):
     ecart_type = np.sqrt(f * (1 - f) / n)
@@ -112,14 +112,14 @@ stat2, p_value2 = shapiro(data2)
 
 print("Test Shapiro - Fichier 1")
 print("Statistique =", round(stat1, 4), ", p-value =", round(p_value1, 6))
-if p_value1 > 0.001:
+if p_value1 > 0.05:
     print("Distribution normale")
 else:
     print("Distribution non normale")
 
 print("\nTest Shapiro - Fichier 2")
 print("Statistique =", round(stat2, 4), ", p-value =", round(p_value2, 6))
-if p_value2 > 0.001:
+if p_value2 > 0.05:
     print("Distribution normale")
 else:
     print("Distribution non normale")
