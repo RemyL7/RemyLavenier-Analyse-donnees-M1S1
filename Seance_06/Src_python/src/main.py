@@ -14,6 +14,21 @@ def ouvrirUnFichier(nom):
         contenu = pd.read_csv(fichier)
     return contenu
 
+#Fonction pour obtenir l'ordre défini entre deux classements (listes spécifiques aux populations)
+def classementPays(ordre1, ordre2):
+    classement = []
+    if len(ordre1) <= len(ordre2):
+        for element1 in range(0, len(ordre2) - 1):
+            for element2 in range(0, len(ordre1) - 1):
+                if ordre2[element1][1] == ordre1[element2][1]:
+                    classement.append([ordre1[element2][0], ordre2[element1][0], ordre1[element2][1]])
+    else:
+        for element1 in range(0, len(ordre1) - 1):
+            for element2 in range(0, len(ordre2) - 1):
+                if ordre2[element2][1] == ordre1[element1][1]:
+                    classement.append([ordre1[element1][0], ordre2[element2][0], ordre1[element][1]])
+    return classement
+
 #Partie sur les îles
 iles = pd.DataFrame(ouvrirUnFichier("./data/island-index.csv"))
 surface = iles[["Surface (km²)"]]
@@ -43,10 +58,10 @@ def ordreDecroissant(liste):
 ordreDecroissant(Surface_km2.values.tolist())
 
 # 5 : loi rang-taille
-surfaces_tries = sorted(Surface_km2["Surface (km²)"].tolist(), reverse=True)
-rangs = range(1, len(surfaces_tries) + 1)
+surfaces_triees = sorted(Surface_km2["Surface (km²)"].tolist(), reverse=True)
+rangs = range(1, len(surfaces_triees) + 1)
 plt.figure(figsize=(8, 6))
-plt.plot(rangs, surfaces_tries, marker='o')
+plt.plot(rangs, surfaces_triees, marker='o')
 plt.xlabel("Rang")
 plt.ylabel("Surface (km²)")
 plt.title("Loi rang–taille des surfaces")
@@ -61,38 +76,25 @@ def conversionLog(liste):
         log.append(math.log(element))
     return log
 
-surfaces_log = conversionLog(surfaces_tries)
+surfaces_log = conversionLog(surfaces_triees)
 rangs = list(range(1, len(surfaces_log) + 1))
 rangs_log = conversionLog(rangs)
 plt.figure(figsize=(8, 6))
-plt.plot(rangs, surfaces_log, marker='o')
+plt.plot(rangs_log, surfaces_log)
 plt.xlabel("Rang")
 plt.ylabel("Surface (km²) en log")
 plt.title("Loi rang–taille des surfaces log")
 plt.grid(True)
 plt.savefig("loi_rang_taille_log.png", dpi=300)
 
+
+print("Image générée : rang_taille_log.png\n")
 """
 COMMENTAIRE :
-Oui, il est possible de faire un test sur les rangs.
-Par exemple, on peut utiliser des tests non paramétriques qui ne dépendent pas de la distribution des valeurs et qui utilisent les rangs directement :
-1. Test de Spearman : pour mesurer la corrélation entre deux séries de rangs.
-2. Test de Kendall : autre test de corrélation basé sur les rangs.
-3. Test de Wilcoxon ou Mann–Whitney : pour comparer deux échantillons indépendants ou appariés sur leurs rangs.
-
-Dans le cadre de la loi rang–taille, on peut par exemple tester si les rangs observés
-suivent une distribution théorique (ex: Zipf) en comparant les rangs attendus et observés.
-Cela reste un test sur les rangs, même si ce n’est pas un test classique "paramétrique".
-"""
-# Partie sur le monde
-monde = pd.DataFrame(ouvrirUnFichier("./data/Le-Monde-HS-Etats-du-monde-2007-2025.csv"))
-Etat = monde[["État"]]
-Pop_2007 = monde[["Pop 2007"]]
-Pop_2025 = monde[["Pop 2025"]]
-densite_2007 = monde[["Densité 2007"]]
-deniste_2025 = monde[["Densité 2025"]]
-
-
+Non. Les rangs ne sont pas des variables aléatoires : ce sont des valeurs
+déterministes obtenues après un tri. Ils ne suivent donc pas une distribution
+probabiliste permettant d’appliquer un test statistique (normalité, KS, etc.)
+On ne peut tester que les valeurs (surfaces), jamais les rangs eux-mêmes.
 """
 #Fonction pour obtenir le classement des listes spécifiques aux populations
 def ordrePopulation(pop, etat):
@@ -104,35 +106,51 @@ def ordrePopulation(pop, etat):
     for element in range(0, len(ordrepop)):
         ordrepop[element] = [element + 1, ordrepop[element][1]]
     return ordrepop
-
-#Fonction pour obtenir l'ordre défini entre deux classements (listes spécifiques aux populations)
-def classementPays(ordre1, ordre2):
-    classement = []
-    if len(ordre1) <= len(ordre2):
-        for element1 in range(0, len(ordre2) - 1):
-            for element2 in range(0, len(ordre1) - 1):
-                if ordre2[element1][1] == ordre1[element2][1]:
-                    classement.append([ordre1[element2][0], ordre2[element1][0], ordre1[element2][1]])
-    else:
-        for element1 in range(0, len(ordre1) - 1):
-            for element2 in range(0, len(ordre2) - 1):
-                if ordre2[element2][1] == ordre1[element1][1]:
-                    classement.append([ordre1[element1][0], ordre2[element2][0], ordre1[element][1]])
-    return classement
-
-
-
-#Attention ! Il va falloir utiliser des fonctions natives de Python dans les fonctions locales que je vous propose pour faire l'exercice. Vous devez caster l'objet Pandas en list().
-
-
-
-
-
-
-#Partie sur les populations des États du monde
-#Source. Depuis 2007, tous les ans jusque 2025, M. Forriez a relevé l'intégralité du nombre d'habitants dans chaque États du monde proposé par un numéro hors-série du monde intitulé États du monde. Vous avez l'évolution de la population et de la densité par année.
+# Partie sur le monde
 monde = pd.DataFrame(ouvrirUnFichier("./data/Le-Monde-HS-Etats-du-monde-2007-2025.csv"))
+colonnes_analyse = ["État", "Pop 2007", "Pop 2025", "Densité 2007", "Densité 2025"]
+donnees = monde[colonnes_analyse]
 
-#Attention ! Il va falloir utiliser des fonctions natives de Python dans les fonctions locales que je vous propose pour faire l'exercice. Vous devez caster l'objet Pandas en list().
-"""
+etats = list(donnees["État"])
+pop2007 = [float(x) for x in donnees["Pop 2007"]]
+pop2025 = [float(x) for x in donnees["Pop 2025"]]
+dens2007 = [float(x) for x in donnees["Densité 2007"]]
+dens2025 = [float(x) for x in donnees["Densité 2025"]]
+
+print(f"Nombre d'États : {len(etats)}\n")
+
+#Etape 2.2 - Classement décroissant populations et densités 
+
+ordre_pop2007 = ordrePopulation(pop2007, etats)
+ordre_pop2025 = ordrePopulation(pop2025, etats)
+ordre_dens2007 = ordrePopulation(dens2007, etats)
+ordre_dens2025 = ordrePopulation(dens2025, etats)
+
+print("Extrait classement Pop 2007 (5 premiers) :", ordre_pop2007[:5])
+print("Extrait classement Densité 2007 (5 premiers) :", ordre_dens2007[:5],"\n")
+
+
+comparaison_pop_dens = classementPays(ordre_pop2007, ordre_dens2007)
+comparaison_pop_dens.sort() 
+
+rangs_pop = []
+rangs_dens = []
+
+for element in comparaison_pop_dens:
+    rangs_pop.append(element[0])
+    rangs_dens.append(element[1])
+
+print("Extrait rangs Pop 2007 :", rangs_pop[:10])
+print("Extrait rangs Densité 2007 :", rangs_dens[:10],"\n")
+
+#Etape 2.5 - Calcul corrélations rang
+print("\nCorrélation de rang (Spearman) et concordance (Kendall) :")
+
+from scipy.stats import spearmanr, kendalltau
+
+spearman_coef, spearman_p = spearmanr(rangs_pop, rangs_dens)
+kendall_coef, kendall_p = kendalltau(rangs_pop, rangs_dens)
+
+print(f"Coefficient de corrélation de rang Spearman : {spearman_coef:.4f} (p-value = {spearman_p:.4f})")
+print(f"Coefficient de concordance de rang Kendall : {kendall_coef:.4f} (p-value = {kendall_p:.4f})")
 
